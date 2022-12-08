@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConvertProvysFr3ToFrx", "ConvertProvysFr3ToFrx.csproj", "{478AC0EC-B84A-4928-87C1-215984003D58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{478AC0EC-B84A-4928-87C1-215984003D58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478AC0EC-B84A-4928-87C1-215984003D58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478AC0EC-B84A-4928-87C1-215984003D58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478AC0EC-B84A-4928-87C1-215984003D58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2A4CC0F0-12EB-40D5-8E86-D3E0E00879A7}
+	EndGlobalSection
+EndGlobal

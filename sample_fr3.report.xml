@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?provys type="XMLExport" version="1" entity_nm="REPORT"?>
+<REPORT NAME_NM="SAMPLE_FR3">
+  <CHANGELOG VER="4.0">
+02.07.2019   1.0  bajtos          [MS190327-28DBC2A] Zapnout trackovani zmen na vsechny typy objektu, gitovane na devu
+08.07.2021   3.0  SADILEK         [LD210625-0608D0A] Technicky Upgrade - server
+22.12.2021   4.0  LUZNY           [JL211222-0672AEA] Pregenerovat PGa XML - REPORT, REPSELECT
+  </CHANGELOG>
+  <DATA>
+    <ENTITY_ID>
+      <NAME_NM>PROG</NAME_NM>
+    </ENTITY_ID>
+    <STDNAME>Programme list</STDNAME>
+    <DESCRIPTION>List of programmes with title of programme and series, episode number, IDEC, duration and tx date</DESCRIPTION>
+    <VERSION>3</VERSION>
+    <REPORTSTATUS_RF>VALID</REPORTSTATUS_RF>
+    <DOCUMENTATION>Output:
+List of programmes.
+
+Dialog box:
+Report is printed without dialog box
+
+Visible fields:
+Title
+Ep.
+Original title
+IDEC
+Duration
+Transmission date
+
+Report format:
+Standard formatted PROVYS report</DOCUMENTATION>
+    <RLOGPROFILE_ID>
+      <NAME_NM>LOGNOTHING</NAME_NM>
+    </RLOGPROFILE_ID>
+    <ADVANCED>true</ADVANCED>
+    <USEORDER>Y</USEORDER>
+    <REPORTTYPE_RF>3</REPORTTYPE_RF>
+    <REPORT_BODY type="CLOB">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;TfrxReport Version=&quot;3.24&quot; DotMatrixReport=&quot;False&quot; EngineOptions.DoublePass=&quot;True&quot; IniFile=&quot;\Software\Provys\FastReport3&quot; PreviewOptions.Buttons=&quot;2047&quot; PreviewOptions.Zoom=&quot;1&quot; PrintOptions.Printer=&quot;Default&quot; ReportOptions.CreateDate=&quot;38023.7536277199&quot; ReportOptions.Description.Text=&quot;&quot; ReportOptions.Name=&quot;Archive programmes&quot; ReportOptions.LastChange=&quot;41453.4208422685&quot; ReportOptions.VersionBuild=&quot;1&quot; ReportOptions.VersionMajor=&quot;1&quot; ReportOptions.VersionMinor=&quot;1&quot; ReportOptions.VersionRelease=&quot;1&quot; ScriptLanguage=&quot;PascalScript&quot; ScriptText.Text=&quot;var myTitle, myEpisodenr, myOrigTitle, MyDate, myMasterOnPageText: String;     MyMasterBandCounter, myOnPageCounter, myMasterIncrementalCounter :integer;    procedure Memo13OnBeforePrint(Sender: TfrxComponent);  begin    if (&amp;lt;Line&amp;gt; mod 2) = 0 then      Memo13.Visible := true    else      Memo13.Visible := false;  end;    procedure Memo7OnBeforePrint(Sender: TfrxComponent);  begin    myTitle := &amp;apos;&amp;apos;;    if &amp;lt;fdsREPORT1.&amp;quot;SERIES_ID&amp;quot;&amp;gt; &amp;lt;&amp;gt; 0 then    begin      myTitle := &amp;lt;fdsREPORT1.&amp;quot;X_SERIES_TITLE&amp;quot;&amp;gt;;      if &amp;lt;fdsREPORT1.&amp;quot;TITLE&amp;quot;&amp;gt; &amp;lt;&amp;gt; &amp;apos;&amp;apos; then        myTitle := myTitle + #13#10 + &amp;apos;   &amp;apos; +&amp;lt;fdsREPORT1.&amp;quot;TITLE&amp;quot;&amp;gt;;    end    else myTitle := &amp;lt;fdsREPORT1.&amp;quot;TITLE&amp;quot;&amp;gt;;  end;    procedure Memo8OnBeforePrint(Sender: TfrxComponent);  begin    if &amp;lt;fdsREPORT1.&amp;quot;EPISODENR&amp;quot;&amp;gt; &amp;lt;&amp;gt; 0 then myEpisodenr := &amp;lt;fdsREPORT1.&amp;quot;EPISODENR&amp;quot;&amp;gt;    else myEpisodenr := &amp;apos;&amp;apos;;  end;    procedure Memo9OnBeforePrint(Sender: TfrxComponent);  begin    myOrigTitle := &amp;apos;&amp;apos;;    if &amp;lt;fdsREPORT1.&amp;quot;SERIES_ID&amp;quot;&amp;gt; &amp;lt;&amp;gt; 0 then    begin      myOrigTitle := &amp;lt;fdsREPORT1.&amp;quot;X_SERIES_ORIGTITLE&amp;quot;&amp;gt;;      if &amp;lt;fdsREPORT1.&amp;quot;ORIGTITLE&amp;quot;&amp;gt; &amp;lt;&amp;gt; &amp;apos;&amp;apos; then        myOrigTitle := myOrigTitle + #13#10 + &amp;apos;   &amp;apos; +&amp;lt;fdsREPORT1.&amp;quot;ORIGTITLE&amp;quot;&amp;gt;;    end    else myOrigTitle := &amp;lt;fdsREPORT1.&amp;quot;ORIGTITLE&amp;quot;&amp;gt;;  end;    procedure Memo12OnBeforePrint(Sender: TfrxComponent);  begin    MyDate := &amp;apos;&amp;apos;;      if &amp;lt;fdsREPORT1.&amp;quot;X_TXDAY_DATE&amp;quot;&amp;gt; &amp;lt;&amp;gt; 0 then    begin      MyDate := formatdatetime(&amp;apos;dd. mm. yyyy&amp;apos;, &amp;lt;fdsREPORT1.&amp;quot;X_TXDAY_DATE&amp;quot;&amp;gt;);      if &amp;lt;fdsREPORT1.&amp;quot;X_TXDAY_DATE&amp;quot;&amp;gt; &amp;gt; &amp;lt;Date&amp;gt; then        Memo12.Font.Style := fsBold      else        if &amp;lt;fdsREPORT1.&amp;quot;X_TXDAY_DATE&amp;quot;&amp;gt; = &amp;lt;DATE&amp;gt; then          Memo12.Font.Style := fsItalic + fsBold        else          Memo12.Font.Style := 0;    end;  end;    procedure MasterData1OnBeforePrint(Sender: TfrxComponent);  begin   If not Engine.FinalPass then    inc(MyMasterBandCounter);    //styl    if (&amp;lt;fdsREPORT1.&amp;quot;X_REQTYPE_RF&amp;quot;&amp;gt; = &amp;lt;fdsREPORT1.&amp;quot;ID_SELF&amp;quot;&amp;gt;) then    begin      Memo7.Font.Style := 0;      Memo8.Font.Style := 0;      Memo9.Font.Style := 0;      Memo10.Font.Style := 0;      Memo11.Font.Style := 0;    end    else if (&amp;lt;fdsREPORT1.&amp;quot;X_REQTYPE_RF&amp;quot;&amp;gt; = &amp;lt;fdsREPORT1.&amp;quot;ID_CB&amp;quot;&amp;gt;) then    begin      Memo7.Font.Style := fsItalic;      Memo8.Font.Style := fsItalic;      Memo9.Font.Style := fsItalic;      Memo10.Font.Style := fsItalic;      Memo11.Font.Style := fsItalic;    end    else      begin      Memo7.Font.Style := fsBold;      Memo8.Font.Style := fsBold;      Memo9.Font.Style := fsBold;      Memo10.Font.Style := fsBold;      Memo11.Font.Style := fsBold;    end  end;      begin    end.&quot; StoreInDFM=&quot;False&quot; PropData=&quot;044C656674021E03546F70021E08446174617365747301010C2E00000020446174615365743D226664735245504F5254312220446174615365744E616D653D226664735245504F525431220000095661726961626C657301010C0000000000010C0F000000204E616D653D222050726F7679732200010C2F000000204E616D653D225468697359656172222056616C75653D22596561724F6628262336303B44617465262336323B29220000055374796C6501010C84000000204E616D653D224D482220436F6C6F723D2231343135303635352220466F6E742E436861727365743D22312220466F6E742E436F6C6F723D222D31363737373230382220466F6E742E4865696768743D222D31332220466F6E742E4E616D653D22417269616C2220466F6E742E5374796C653D223122204672616D652E5479703D22382200010C76000000204E616D653D224D442220436F6C6F723D2231363737343337382220466F6E742E436861727365743D22312220466F6E742E436F6C6F723D222D31363737373230382220466F6E742E4865696768743D222D31332220466F6E742E4E616D653D22417269616C2220466F6E742E5374796C653D22302200010C76000000204E616D653D2244482220436F6C6F723D2231353339373337352220466F6E742E436861727365743D22312220466F6E742E436F6C6F723D222D31363737373230382220466F6E742E4865696768743D222D31322220466F6E742E4E616D653D22417269616C2220466F6E742E5374796C653D22312200010C76000000204E616D653D2244442220436F6C6F723D2231363737363433362220466F6E742E436861727365743D22312220466F6E742E436F6C6F723D222D31363737373230382220466F6E742E4865696768743D222D31322220466F6E742E4E616D653D22417269616C2220466F6E742E5374796C653D22302200010C89000000204E616D653D224D6173746572486561646572204D53205374796C652220436F6C6F723D223533363837303931312220466F6E742E436861727365743D22302220466F6E742E436F6C6F723D22383338383630382220466F6E742E4865696768743D222D31392220466F6E742E4E616D653D225461686F6D612220466F6E742E5374796C653D2230220000&quot;&gt;
+  &lt;TfrxReportPage Name=&quot;Page1&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;0&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Tahoma&quot; Font.Style=&quot;0&quot; PaperWidth=&quot;210&quot; PaperHeight=&quot;297&quot; PaperSize=&quot;9&quot; LeftMargin=&quot;8.001&quot; RightMargin=&quot;8.001&quot; TopMargin=&quot;8.001&quot; BottomMargin=&quot;8.001&quot; ColumnWidth=&quot;0&quot; ColumnPositions.Text=&quot;&quot; HGuides.Text=&quot;&quot; VGuides.Text=&quot;&quot; OnBeforePrint=&quot;Page1OnBeforePrint&quot;&gt;
+    &lt;TfrxPageHeader Name=&quot;PageHeader1&quot; Height=&quot;66&quot; Left=&quot;0&quot; Top=&quot;18.89765&quot; Width=&quot;733.22126094&quot;&gt;
+      &lt;TfrxMemoView Name=&quot;Memo36&quot; Align=&quot;baCenter&quot; Left=&quot;110.5&quot; Top=&quot;21&quot; Width=&quot;512.22126094&quot; Height=&quot;29&quot; StretchMode=&quot;smMaxHeight&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;0&quot; Font.Height=&quot;-24&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; Text=&quot;[ReportNLSNAME]&quot;/&gt;
+      &lt;TfrxLineView Name=&quot;Line9&quot; Align=&quot;baWidth&quot; Left=&quot;0&quot; Top=&quot;66&quot; Width=&quot;733.22126094&quot; Height=&quot;0&quot; Frame.Typ=&quot;4&quot; Frame.Width=&quot;1.5&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo38&quot; Align=&quot;baRight&quot; Left=&quot;500.22126094&quot; Top=&quot;0&quot; Width=&quot;233&quot; Height=&quot;20&quot; StretchMode=&quot;smMaxHeight&quot; AutoWidth=&quot;True&quot; AllowHTMLTags=&quot;True&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;0&quot; Font.Height=&quot;-16&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; HAlign=&quot;haRight&quot; ParentFont=&quot;False&quot; Text=&quot;Page: &amp;lt;b&amp;gt;[PAGE#] / [TotalPages#]&amp;lt;/b&amp;gt;&quot;/&gt;
+      &lt;TfrxPictureView Name=&quot;imgLOGO&quot; Align=&quot;baLeft&quot; Left=&quot;0&quot; Top=&quot;0&quot; Width=&quot;156&quot; Height=&quot;49&quot; TagStr=&quot;IMGLOGO;Y;&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo15&quot; Left=&quot;500&quot; Top=&quot;33&quot; Width=&quot;233&quot; Height=&quot;16&quot; AllowHTMLTags=&quot;True&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; HAlign=&quot;haRight&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Number of records: &amp;lt;b&amp;gt;[MyMasterBandCounter]&amp;lt;/b&amp;gt;&quot;/&gt;
+    &lt;/TfrxPageHeader&gt;
+    &lt;TfrxPageFooter Name=&quot;PageFooter1&quot; Height=&quot;38&quot; Left=&quot;0&quot; Top=&quot;268.34663&quot; Width=&quot;733.22126094&quot;&gt;
+      &lt;TfrxMemoView Name=&quot;Memo50&quot; Left=&quot;274&quot; Top=&quot;7&quot; Width=&quot;192&quot; Height=&quot;29&quot; OnBeforePrint=&quot;Memo50OnBeforePrint&quot; StretchMode=&quot;smMaxHeight&quot; AllowHTMLTags=&quot;True&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;0&quot; Font.Height=&quot;-9&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; WordWrap=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Page: [Page#] / [TotalPages#]&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo52&quot; Left=&quot;0&quot; Top=&quot;7&quot; Width=&quot;274&quot; Height=&quot;29&quot; StretchMode=&quot;smMaxHeight&quot; AllowHTMLTags=&quot;True&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;0&quot; Font.Height=&quot;-9&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; ParentFont=&quot;False&quot; WordWrap=&quot;False&quot; Text=&quot;Report: &amp;lt;i&amp;gt;[REPORTNLSNAME]&amp;lt;/i&amp;gt;  User: &amp;lt;i&amp;gt;[USERFULLNAME] / [COMPUTERNAME]&amp;lt;/i&amp;gt;&quot;/&gt;
+      &lt;TfrxLineView Name=&quot;Line10&quot; Align=&quot;baWidth&quot; Left=&quot;0&quot; Top=&quot;3&quot; Width=&quot;733.22126094&quot; Height=&quot;0&quot; Frame.Style=&quot;fsDot&quot; Frame.Typ=&quot;4&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo53&quot; Left=&quot;466.22126094&quot; Top=&quot;7&quot; Width=&quot;267&quot; Height=&quot;29&quot; StretchMode=&quot;smMaxHeight&quot; AllowHTMLTags=&quot;True&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;0&quot; Font.Height=&quot;-9&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; HAlign=&quot;haRight&quot; ParentFont=&quot;False&quot; WordWrap=&quot;False&quot; Text=&quot;Printed with PROVYS &amp;lt;i&amp;gt;TVoffice&amp;lt;/i&amp;gt; © [ThisYear]  on &amp;lt;i&amp;gt;[DATE], [FormatDateTime(&amp;apos;hh:nn&amp;apos;, Time)]&amp;lt;/i&amp;gt;&quot;/&gt;
+    &lt;/TfrxPageFooter&gt;
+    &lt;TfrxHeader Name=&quot;Header1&quot; Height=&quot;20&quot; Left=&quot;0&quot; Top=&quot;147.40167&quot; Width=&quot;733.22126094&quot; ReprintOnNewPage=&quot;True&quot;&gt;
+      &lt;TfrxMemoView Name=&quot;Memo14&quot; Left=&quot;0&quot; Top=&quot;0&quot; Width=&quot;733&quot; Height=&quot;19&quot; StretchMode=&quot;smMaxHeight&quot; Color=&quot;11064319&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; ParentFont=&quot;False&quot; Text=&quot;&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo1&quot; Left=&quot;0&quot; Top=&quot;0&quot; Width=&quot;176&quot; Height=&quot;20&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;128&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; Frame.Typ=&quot;8&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Series / Programme&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo2&quot; Left=&quot;176&quot; Top=&quot;0&quot; Width=&quot;64&quot; Height=&quot;20&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;128&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; Frame.Typ=&quot;8&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Ep.&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo3&quot; Left=&quot;240&quot; Top=&quot;0&quot; Width=&quot;160&quot; Height=&quot;20&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;128&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; Frame.Typ=&quot;8&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Original title&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo4&quot; Left=&quot;400&quot; Top=&quot;0&quot; Width=&quot;140&quot; Height=&quot;20&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;128&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; Frame.Typ=&quot;8&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Programme ID&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo5&quot; Left=&quot;540&quot; Top=&quot;0&quot; Width=&quot;70&quot; Height=&quot;20&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;128&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; Frame.Typ=&quot;8&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Duration&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo6&quot; Left=&quot;610&quot; Top=&quot;0&quot; Width=&quot;123&quot; Height=&quot;20&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;128&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; Frame.Typ=&quot;8&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;Tx. date&quot;/&gt;
+    &lt;/TfrxHeader&gt;
+    &lt;TfrxMasterData Name=&quot;MasterData1&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;0&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Tahoma&quot; Font.Style=&quot;0&quot; Height=&quot;20&quot; Left=&quot;0&quot; ParentFont=&quot;False&quot; Top=&quot;188.9765&quot; Width=&quot;733.22126094&quot; OnBeforePrint=&quot;MasterData1OnBeforePrint&quot; ColumnWidth=&quot;0&quot; ColumnGap=&quot;0&quot; DataSet=&quot;fdsREPORT1&quot; DataSetName=&quot;fdsREPORT1&quot; RowCount=&quot;0&quot; Stretched=&quot;True&quot;&gt;
+      &lt;TfrxMemoView Name=&quot;Memo13&quot; Left=&quot;0&quot; Top=&quot;0&quot; Width=&quot;733&quot; Height=&quot;20&quot; OnBeforePrint=&quot;Memo13OnBeforePrint&quot; StretchMode=&quot;smMaxHeight&quot; Color=&quot;15264247&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;1&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; Text=&quot;&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo7&quot; ShiftMode=&quot;smWhenOverlapped&quot; Left=&quot;0&quot; Top=&quot;0&quot; Width=&quot;176&quot; Height=&quot;20&quot; OnBeforePrint=&quot;Memo7OnBeforePrint&quot; StretchMode=&quot;smMaxHeight&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;[myTitle]&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo8&quot; ShiftMode=&quot;smWhenOverlapped&quot; Left=&quot;176&quot; Top=&quot;0&quot; Width=&quot;64&quot; Height=&quot;20&quot; OnBeforePrint=&quot;Memo8OnBeforePrint&quot; StretchMode=&quot;smMaxHeight&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;[myEpisodenr]&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo9&quot; ShiftMode=&quot;smWhenOverlapped&quot; Left=&quot;240&quot; Top=&quot;0&quot; Width=&quot;162&quot; Height=&quot;20&quot; OnBeforePrint=&quot;Memo9OnBeforePrint&quot; StretchMode=&quot;smActualHeight&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Tahoma&quot; Font.Style=&quot;0&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;[myOrigTitle]&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo10&quot; ShiftMode=&quot;smWhenOverlapped&quot; Left=&quot;402&quot; Top=&quot;0&quot; Width=&quot;138&quot; Height=&quot;20&quot; StretchMode=&quot;smMaxHeight&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;[fdsREPORT1.&amp;quot;IDEC&amp;quot;]&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo11&quot; ShiftMode=&quot;smWhenOverlapped&quot; Left=&quot;540&quot; Top=&quot;0&quot; Width=&quot;70&quot; Height=&quot;20&quot; StretchMode=&quot;smMaxHeight&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;[fdsREPORT1.&amp;quot;DURATION&amp;quot;]&quot;/&gt;
+      &lt;TfrxMemoView Name=&quot;Memo12&quot; ShiftMode=&quot;smWhenOverlapped&quot; Left=&quot;610&quot; Top=&quot;0&quot; Width=&quot;123&quot; Height=&quot;20&quot; OnBeforePrint=&quot;Memo12OnBeforePrint&quot; StretchMode=&quot;smMaxHeight&quot; Font.Charset=&quot;1&quot; Font.Color=&quot;-16777208&quot; Font.Height=&quot;-13&quot; Font.Name=&quot;Arial&quot; Font.Style=&quot;0&quot; HAlign=&quot;haCenter&quot; ParentFont=&quot;False&quot; VAlign=&quot;vaCenter&quot; Text=&quot;[myDate]&quot;/&gt;
+    &lt;/TfrxMasterData&gt;
+  &lt;/TfrxReportPage&gt;
+&lt;/TfrxReport&gt;
+</REPORT_BODY>
+    <HISTORY type="CLOB">07.08.2009 jandak [MD090512-0987DAA] created (converted from fr2)
+10.01.2013 marjov [MD090512-0987DAA] upravy designu
+18.02.2013 burian [JJ130213-1E6280A] upravy designu (fonty, Page Header)
+24.09.2014 krob [MB140901-20B8D3A] hided
+29.10.2015 mařík [JJ130213-1E6280A]  kontrola</HISTORY>
+  </DATA>
+  <CHILDREN>
+    <GUI_FORMCLASS_REPORT_FK/>
+    <GUI_REPSELECT_REPORT_ROOT>
+      <REPSELECT REPORT_ID.NAME_NM="PRG_PROG_LIST_FR3" NAME_NM="REPORT1">
+        <DATA>
+          <REPSELECTTYPE>S</REPSELECTTYPE>
+          <ORD>1</ORD>
+          <BODY type="CLOB"> SELECT prog_id,
+       prg_series_ep.mfw_getTitle(:PROVYSPARAM_SERIES_ID) param_series_title,
+       x_series_title,
+       title,
+       x_series_origtitle,
+       x_episodenr episodenr,
+       origtitle,
+       plepisodenr,
+       BRC_Convert_EP.Mfw_Tocsm_Frame(x_duration_tc) duration,
+       idec,
+       x_txday_date,
+       reqtype_rf x_reqtype_rf,
+       a_approvedby_id,
+       series_id,
+       ref_reference_ep.mfw_getid_nm(&apos;REQTYPE&apos;, &apos;CB&apos;) ID_CB,
+       ref_reference_ep.mfw_getid_nm(&apos;REQTYPE&apos;, &apos;SELF&apos;) ID_SELF
+  FROM prg_prog_list_dw
+ -- PRO LADENI
+--where x_uptitle like &apos;MA%&apos;
+
+-- ORDER BY x_series_title, title,  episodenr
+</BODY>
+        </DATA>
+        <CHILDREN>
+          <GUI_REPSELECT_MASTER_FK/>
+        </CHILDREN>
+      </REPSELECT>
+    </GUI_REPSELECT_REPORT_ROOT>
+  </CHILDREN>
+</REPORT>
